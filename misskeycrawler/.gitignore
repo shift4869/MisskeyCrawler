@@ -125,4 +125,3 @@ log*.txt*
 !requirements.txt
 /sample
 /data
-cache/

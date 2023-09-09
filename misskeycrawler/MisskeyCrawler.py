@@ -1,4 +1,5 @@
-import sys
+from misskeycrawler.crawler.Crawler import Crawler
 
 if __name__ == "__main__":
-    print("ok")
+    crawler = Crawler()
+    crawler.run()
