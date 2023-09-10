@@ -326,6 +326,17 @@ class Media(Base):
             "registered_at": self.registered_at,
         }
 
+    def get_filename(self) -> str:
+        ext1 = Path(self.url).suffix
+        ext2 = "." + self.type.split("/")[1]
+        if ext2.startswith(".x-"):
+            ext2 = ext2[2:]
+        ext3 = Path(self.name).suffix
+        ext = ext1 or ext2 or ext3
+
+        name = Path(self.name).with_suffix(ext).name
+        return f"{self.note_id}_{self.media_id}_{name}"
+
 
 if __name__ == "__main__":
     from sqlalchemy import create_engine

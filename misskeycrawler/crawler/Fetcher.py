@@ -1,5 +1,6 @@
 
 import pprint
+from datetime import datetime
 from logging import INFO, getLogger
 from pathlib import Path
 
@@ -14,28 +15,58 @@ logger.setLevel(INFO)
 
 class Fetcher():
     misskey: Misskey
+    is_debug: bool
+    cache_path = Path("./misskeycrawler/cache/")
 
-    def __init__(self, config_path: Path) -> None:
+    def __init__(self, config_path: Path, is_debug: bool = False) -> None:
+        logger.info("Fetcher init -> start")
         config_dict = orjson.loads(config_path.read_bytes())
         self.misskey = Misskey("misskey.io", config_dict["misskey"]["token"])
+        self.is_debug = is_debug
+
+        self.cache_path.mkdir(parents=True, exist_ok=True)
+        logger.info("Fetcher init -> done")
     
-    def fetch(self, last_since_id: str) -> list[FetchedInfo]:
+    def fetch(self, last_since_id: str = "") -> list[FetchedInfo]:
+        logger.info("Fetcher fetch -> start")
         fetched_entry_list: list[dict] = []
-        if True:
+        if not self.is_debug:
+            logger.info("Fetch from misskey API -> start")
             fetched_entry_list = self.misskey.notes_with_reactions(
                 limit=100, last_since_id=last_since_id
             )
+            logger.info("Fetch from misskey API -> done")
+
+            if len(fetched_entry_list) > 0:
+                logger.info("Saving Cache -> start")
+                date_str = datetime.now().strftime("%Y%m%d%H%M%S")  # YYYYMMDDhhmmss
+                cache_filename = f"{date_str}_notes_with_reactions.json"
+                save_path = self.cache_path / cache_filename
+                save_path.write_bytes(
+                    orjson.dumps({"result": fetched_entry_list}, option=orjson.OPT_INDENT_2)
+                )
+                logger.info(f"Saved for {str(save_path)}.")
+                logger.info("Saving Cache -> done")
         else:
-            cache_path = Path("./misskeycrawler/cache/")
+            logger.info("Fetch from cache file -> start")
+            load_paths: list[Path] = [p for p in self.cache_path.glob("*notes_with_reactions.json*")]
+            if len(load_paths) == 0:
+                raise ValueError("Cache file is not exist.")
+            load_path: Path = load_paths[-1]
             fetched_entry_list: list[dict] = orjson.loads(
-                (cache_path / "notes_with_reactions.json").read_bytes()
+                load_path.read_bytes()
             ).get("result")
+            logger.info(f"Loaded from {str(load_path)}.")
+            logger.info("Fetch from cache file -> done")
         fetched_entry_list.reverse()
 
+        logger.info("Create FetchedInfo -> start")
         fetched_info_list = []
         for entry in fetched_entry_list:
             fetched_info = FetchedInfo.create(entry)
             fetched_info_list.append(fetched_info)
+        logger.info("Create FetchedInfo -> done")
+        logger.info("Fetcher fetch -> done")
         return fetched_info_list
 
 
@@ -45,7 +76,7 @@ if __name__ == "__main__":
     config_path: Path = Path("./config/config.json")
     cache_path = Path("./misskeycrawler/cache/")
 
-    fetcher = Fetcher(config_path)
+    fetcher = Fetcher(config_path, is_debug=True)
     response = fetcher.fetch()
     (cache_path / "notes_with_reactions.json").write_bytes(
         orjson.dumps({"result": response}, option=orjson.OPT_INDENT_2)

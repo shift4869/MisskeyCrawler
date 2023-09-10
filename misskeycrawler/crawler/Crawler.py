@@ -1,8 +1,8 @@
-
-import logging.config
-from logging import INFO, getLogger
+import time
+from logging import getLogger
 from pathlib import Path
 
+from misskeycrawler.crawler.Downloader import Downloader
 from misskeycrawler.crawler.Fetcher import Fetcher
 from misskeycrawler.crawler.valueobject.FetchedInfo import FetchedInfo
 from misskeycrawler.db.MediaDB import MediaDB
@@ -10,10 +10,7 @@ from misskeycrawler.db.NoteDB import NoteDB
 from misskeycrawler.db.ReactionDB import ReactionDB
 from misskeycrawler.db.UserDB import UserDB
 
-logging.config.fileConfig("./log/logging.ini", disable_existing_loggers=False)
-
 logger = getLogger(__name__)
-logger.setLevel(INFO)
 
 
 class Crawler():
@@ -25,21 +22,35 @@ class Crawler():
     config_path: Path = Path("./config/config.json")
 
     def __init__(self) -> None:
+        logger.info("Crawler init -> start")
         self.fetcher = Fetcher(self.config_path)
+        self.downloader = Downloader(self.config_path)
         self.reaction_db = ReactionDB()
         self.note_db = NoteDB()
         self.user_db = UserDB()
         self.media_db = MediaDB()
+        logger.info("Crawler init -> done")
 
     def run(self) -> None:
+        logger.info("Crawler run -> start")
         # 最後にリアクションをつけた日付を取得
         reaction_list = self.reaction_db.select()
         last_reaction_id = max(
             [r.reaction_id for r in reaction_list]
         )
+        logger.info(f"Last reaction id is '{last_reaction_id}'.")
 
         # fetch
+        start_time = time.time()
         fetched_list: list[FetchedInfo] = self.fetcher.fetch(last_reaction_id)
+        elapsed_time = time.time() - start_time
+        logger.info(f"Fetching : {elapsed_time} [sec].")
+        if len(fetched_list) == 0:
+            logger.info("No reaction created from last reaction.")
+            logger.info("Crawler run -> done")
+            return
+
+        # FetchedInfo をそれぞれのリストに分解
         reaction_list, note_list, user_list, media_list = [], [], [], []
         for fetched_record in fetched_list:
             records = fetched_record.get_records()
@@ -54,13 +65,21 @@ class Crawler():
                 if media not in media_list:
                     media_list.append(media)
 
+        # メディアダウンロード・保存
+        logger.info(f"Num of new media is {len(media_list)}.")
+        start_time = time.time()
+        self.downloader.download(media_list)
+        elapsed_time = time.time() - start_time
+        logger.info(f"Download : {elapsed_time} [sec].")
+
         # DB操作
+        logger.info("DB control -> start.")
         self.reaction_db.upsert(reaction_list)
         self.note_db.upsert(note_list)
         self.user_db.upsert(user_list)
         self.media_db.upsert(media_list)
-
-        # メディア保存
+        logger.info("DB control -> done.")
+        logger.info("Crawler run -> done")
 
 
 if __name__ == "__main__":
