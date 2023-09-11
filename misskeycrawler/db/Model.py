@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 from typing import Self
 
 from sqlalchemy import Boolean, Column, Integer, String, create_engine
@@ -327,12 +328,18 @@ class Media(Base):
         }
 
     def get_filename(self) -> str:
-        ext1 = Path(self.url).suffix
-        ext2 = "." + self.type.split("/")[1]
-        if ext2.startswith(".x-"):
-            ext2 = ext2[2:]
-        ext3 = Path(self.name).suffix
-        ext = ext1 or ext2 or ext3
+        ext = ""
+        if re.search("^\..+$", (ext1 := Path(self.url).suffix)):
+            ext = ext1
+        elif re.search("^.+?/.+$", (ext2 := self.type)):
+            ext = "." + ext2.split("/")[1]
+            if ext.startswith(".x-"):
+                ext = "." + ext[3:]
+        elif re.search("^\..+$", (ext3 := Path(self.name).suffix)):
+            ext = ext3
+
+        if not re.search("^\..+$", ext):
+            raise ValueError("failed to get filename, invalid extension.")
 
         name = Path(self.name).with_suffix(ext).name
         return f"{self.note_id}_{self.media_id}_{name}"

@@ -1,11 +1,6 @@
-# coding: utf-8
-import re
-from typing import Self
-
-from sqlalchemy import and_, asc, or_
+from sqlalchemy import and_
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.sql import func
 
 from misskeycrawler.db.Base import Base
 from misskeycrawler.db.Model import Media
@@ -34,17 +29,15 @@ class MediaDB(Base):
         """
         result: list[int] = []
         record_list: list[Media] = []
-        if isinstance(record, Media):
-            record_list = [record]
-        elif isinstance(record, list):
-            if len(record) == 0:
-                raise ValueError("record list is empty.")
-            if isinstance(record[0], dict):
-                record_list = [Media.create(r) for r in record]
-            elif isinstance(record[0], Media):
+        match record:
+            case Media():
+                record_list = [record]
+            case [Media(), *rest] if all([isinstance(r, Media) for r in rest]):
                 record_list = record
-            else:
-                raise ValueError("record list include invalid element.")
+            case [dict(), *rest] if all([isinstance(r, dict) for r in rest]):
+                record_list = [Media.create(r) for r in record]
+            case _:
+                raise TypeError("record is invalid type.")
 
         Session = sessionmaker(bind=self.engine, autoflush=False)
         session = Session()

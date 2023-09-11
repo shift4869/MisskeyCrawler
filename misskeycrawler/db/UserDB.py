@@ -29,17 +29,15 @@ class UserDB(Base):
         """
         result: list[int] = []
         record_list: list[User] = []
-        if isinstance(record, User):
-            record_list = [record]
-        elif isinstance(record, list):
-            if len(record) == 0:
-                raise ValueError("record list is empty.")
-            if isinstance(record[0], dict):
-                record_list = [User.create(r) for r in record]
-            elif isinstance(record[0], User):
+        match record:
+            case User():
+                record_list = [record]
+            case [User(), *rest] if all([isinstance(r, User) for r in rest]):
                 record_list = record
-            else:
-                raise ValueError("record list include invalid element.")
+            case [dict(), *rest] if all([isinstance(r, dict) for r in rest]):
+                record_list = [User.create(r) for r in record]
+            case _:
+                raise TypeError("record is invalid type.")
 
         Session = sessionmaker(bind=self.engine, autoflush=False)
         session = Session()

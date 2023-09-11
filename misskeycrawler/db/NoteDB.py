@@ -29,17 +29,15 @@ class NoteDB(Base):
         """
         result: list[int] = []
         record_list: list[Note] = []
-        if isinstance(record, Note):
-            record_list = [record]
-        elif isinstance(record, list):
-            if len(record) == 0:
-                raise ValueError("record list is empty.")
-            if isinstance(record[0], dict):
-                record_list = [Note.create(r) for r in record]
-            elif isinstance(record[0], Note):
+        match record:
+            case Note():
+                record_list = [record]
+            case [Note(), *rest] if all([isinstance(r, Note) for r in rest]):
                 record_list = record
-            else:
-                raise ValueError("record list include invalid element.")
+            case [dict(), *rest] if all([isinstance(r, dict) for r in rest]):
+                record_list = [Note.create(r) for r in record]
+            case _:
+                raise TypeError("record is invalid type.")
 
         Session = sessionmaker(bind=self.engine, autoflush=False)
         session = Session()
