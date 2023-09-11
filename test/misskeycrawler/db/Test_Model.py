@@ -7,7 +7,7 @@ from typing import Literal
 from misskeycrawler.db.Model import Media, Note, Reaction, User
 
 
-class TestUserDB(unittest.TestCase):
+class TestModel(unittest.TestCase):
     def get_record(self, id_num: int, type_kind: Literal["record", "list", "dict"] = "record") -> Media | list[Media] | list[dict]:
         now_date = datetime.now().isoformat()
         arg_dict = {

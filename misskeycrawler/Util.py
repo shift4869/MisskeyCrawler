@@ -8,13 +8,15 @@ def find_values(obj: Any,
                 key_whitelist: list[str] = [],
                 key_blacklist: list[str] = []) -> Any | list[Any]:
     def _inner_helper(inner_obj: Any, inner_key: str, inner_result: list) -> list:
-        if inner_key in key_blacklist:
-            return inner_result
+        # if inner_key in key_blacklist:
+        #     return inner_result
         if isinstance(inner_obj, dict) and (inner_dict := inner_obj):
             for k, v in inner_dict.items():
                 if k == inner_key:
                     inner_result.append(v)
                 if key_whitelist and (k not in key_whitelist):
+                    continue
+                if k in key_blacklist:
                     continue
                 inner_result.extend(_inner_helper(v, inner_key, []))
         if isinstance(inner_obj, list) and (inner_list := inner_obj):
@@ -34,5 +36,7 @@ def find_values(obj: Any,
 
 
 def to_jst(gmt: datetime) -> datetime:
+    if not isinstance(gmt, datetime):
+        raise ValueError("args is not datetime.")
     jst = gmt + timedelta(hours=9)
     return jst
