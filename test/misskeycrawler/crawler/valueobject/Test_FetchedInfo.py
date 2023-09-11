@@ -1,30 +1,24 @@
-import pprint
-from dataclasses import dataclass
+import sys
+import unittest
 from datetime import datetime
 from pathlib import Path
-from typing import Self
 
 import orjson
 
+from misskeycrawler.crawler.valueobject.FetchedInfo import FetchedInfo
 from misskeycrawler.db.Model import Media, Note, Reaction, User
 from misskeycrawler.Util import find_values, to_jst
 
 
-@dataclass(frozen=True)
-class FetchedInfo():
-    reaction: Reaction
-    note: Note
-    user: User
-    media_list: list[Media]
+class TestFetchedInfo(unittest.TestCase):
+    def setUp(self) -> None:
+        self.cache_filepath = Path("./test/misskeycrawler/cache/test_notes_with_reactions.json")
+        self.fetched_entry_list = orjson.loads(
+            self.cache_filepath.read_bytes()
+        ).get("result")
+        return super().setUp()
 
-    def get_records(self) -> list[tuple[Reaction, Note, User, Media]]:
-        return [
-            (self.reaction, self.note, self.user, media)
-            for media in self.media_list
-        ]
-
-    @classmethod
-    def create(cls, fetched_dict: dict) -> Self:
+    def expect_create(self, fetched_dict: dict) -> FetchedInfo:
         def normalize_date_at(date_at_str: str) -> str:
             result = to_jst(
                 datetime.fromisoformat(
@@ -40,10 +34,7 @@ class FetchedInfo():
         note_id = find_values(note_dict, "id", True, [""])
 
         media_dicts = []
-        try:
-            media_dicts = find_values(note_dict, "files", True, [""])
-        except ValueError as e:
-            raise ValueError("Note entry has no media.")
+        media_dicts = find_values(note_dict, "files", True, [""])
 
         media_list = []
         for media_dict in media_dicts:
@@ -112,20 +103,26 @@ class FetchedInfo():
             "is_cat": user_is_cat,
             "registered_at": registered_at,
         })
-
         return FetchedInfo(reaction, note, user, media_list)
+
+    def test_create(self):
+        for entry in self.fetched_entry_list[:-1]:
+            expect = self.expect_create(entry)
+            actual = FetchedInfo.create(entry)
+            self.assertEqual(expect, actual)
+
+        entry = self.fetched_entry_list[-1]
+        with self.assertRaises(ValueError):
+            actual = FetchedInfo.create(entry)
+
+    def test_get_records(self):
+        for entry in self.fetched_entry_list[:-1]:
+            expect = self.expect_create(entry)
+            actual = FetchedInfo.create(entry)
+            self.assertEqual(expect.get_records(), actual.get_records())
 
 
 if __name__ == "__main__":
-    cache_path = Path("./misskeycrawler/cache/")
-    load_paths: list[Path] = [p for p in cache_path.glob("*notes_with_reactions.json*")]
-    if len(load_paths) == 0:
-        pprint.pprint("Cache file is not exist.")
-        exit(-1)
-    load_path: Path = load_paths[-1]
-    fetched_entry_list: list[dict] = orjson.loads(
-        load_path.read_bytes()
-    ).get("result")
-    for entry in fetched_entry_list[:3]:
-        fetched_info = FetchedInfo.create(entry)
-        pprint.pprint(fetched_info)
+    if sys.argv:
+        del sys.argv[1:]
+    unittest.main(warnings="ignore")

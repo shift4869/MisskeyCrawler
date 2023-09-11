@@ -25,7 +25,7 @@ class Downloader():
         self.save_base_path.mkdir(parents=True, exist_ok=True)
         logger.info("Downloader init -> done")
 
-    async def worker(self, media: Media):
+    async def worker(self, media: Media) -> None:
         async with httpx.AsyncClient(timeout=httpx.Timeout(5, read=60)) as client:
             url = media.url
             filename = media.get_filename()
@@ -40,7 +40,7 @@ class Downloader():
                 response.content
             )
 
-    async def excute(self, media_list: list[Media]):
+    async def excute(self, media_list: list[Media]) -> None:
         task_list = [self.worker(media) for media in media_list]
         await asyncio.gather(*task_list)
 

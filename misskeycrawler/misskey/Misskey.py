@@ -42,7 +42,7 @@ class Misskey():
         if last_since_id != "":
             params["sinceId"] = str(last_since_id)
 
-        reaction_dict = self._run('users/reactions', params)
+        reaction_dict = self._run("users/reactions", params)
         return reaction_dict
 
 
