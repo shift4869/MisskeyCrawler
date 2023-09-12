@@ -28,6 +28,7 @@ class TestMisskey(unittest.TestCase):
             mock_misskey = stack.enter_context(patch("misskeycrawler.misskey.Misskey.Mk"))
             misskey = Misskey("misskey.io", self.token)
             mock_misskey.assert_called_once_with("misskey.io", i=self.token)
+            self.assertEqual("misskey.io", misskey.instance_name)
             self.assertEqual(self.token, misskey.token)
             self.assertEqual(120, misskey.misskey.timeout)
 

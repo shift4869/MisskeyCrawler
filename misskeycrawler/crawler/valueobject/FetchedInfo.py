@@ -24,7 +24,7 @@ class FetchedInfo():
         ]
 
     @classmethod
-    def create(cls, fetched_dict: dict) -> Self:
+    def create(cls, fetched_dict: dict, instance_name: str = "") -> Self:
         def normalize_date_at(date_at_str: str) -> str:
             result = to_jst(
                 datetime.fromisoformat(
@@ -83,7 +83,7 @@ class FetchedInfo():
         })
 
         user_id = find_values(note_dict, "userId", True, [""])
-        note_url = f"https://misskey.io/notes/{note_id}"  # インスタンスごとに分ける
+        note_url = f"https://{instance_name}/notes/{note_id}"
         note_text = find_values(note_dict, "text", True, [""])
         note_created_at = normalize_date_at(
             find_values(note_dict, "createdAt", True, [""])

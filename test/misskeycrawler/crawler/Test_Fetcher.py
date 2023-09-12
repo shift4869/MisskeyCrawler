@@ -46,7 +46,8 @@ class TestFetcher(unittest.TestCase):
             mock_fetched_info = stack.enter_context(patch("misskeycrawler.crawler.Fetcher.FetchedInfo"))
 
             mock_misskey().notes_with_reactions.side_effect = lambda limit, last_since_id: ["fetched_entry"]
-            mock_fetched_info.create.side_effect = lambda entry: entry
+            mock_misskey().instance_name = "misskey.io"
+            mock_fetched_info.create.side_effect = lambda fetched_dict, instance_name: fetched_dict
 
             fetcher = Fetcher(self.config_path, False)
             fetcher.cache_path = Path("./test/misskeycrawler/cache")

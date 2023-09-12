@@ -18,7 +18,7 @@ class TestFetchedInfo(unittest.TestCase):
         ).get("result")
         return super().setUp()
 
-    def expect_create(self, fetched_dict: dict) -> FetchedInfo:
+    def expect_create(self, fetched_dict: dict, instance_name: str = "") -> FetchedInfo:
         def normalize_date_at(date_at_str: str) -> str:
             result = to_jst(
                 datetime.fromisoformat(
@@ -74,7 +74,7 @@ class TestFetchedInfo(unittest.TestCase):
         })
 
         user_id = find_values(note_dict, "userId", True, [""])
-        note_url = f"https://misskey.io/notes/{note_id}"  # インスタンスごとに分ける
+        note_url = f"https://{instance_name}/notes/{note_id}"
         note_text = find_values(note_dict, "text", True, [""])
         note_created_at = normalize_date_at(
             find_values(note_dict, "createdAt", True, [""])
@@ -106,9 +106,10 @@ class TestFetchedInfo(unittest.TestCase):
         return FetchedInfo(reaction, note, user, media_list)
 
     def test_create(self):
+        instance_name = "test.misskey.io"
         for entry in self.fetched_entry_list[:-1]:
-            expect = self.expect_create(entry)
-            actual = FetchedInfo.create(entry)
+            expect = self.expect_create(entry, instance_name)
+            actual = FetchedInfo.create(entry, instance_name)
             self.assertEqual(expect, actual)
 
         entry = self.fetched_entry_list[-1]
@@ -116,9 +117,10 @@ class TestFetchedInfo(unittest.TestCase):
             actual = FetchedInfo.create(entry)
 
     def test_get_records(self):
+        instance_name = "test.misskey.io"
         for entry in self.fetched_entry_list[:-1]:
-            expect = self.expect_create(entry)
-            actual = FetchedInfo.create(entry)
+            expect = self.expect_create(entry, instance_name)
+            actual = FetchedInfo.create(entry, instance_name)
             self.assertEqual(expect.get_records(), actual.get_records())
 
 

@@ -12,10 +12,12 @@ logger.setLevel(INFO)
 
 
 class Misskey():
+    instance_name: str
     token: str
     misskey: Mk
 
     def __init__(self, instance_name: str, token: str) -> None:
+        self.instance_name = instance_name
         self.token = token
         self.misskey = Mk(instance_name, i=token)
         self.misskey.timeout = 120

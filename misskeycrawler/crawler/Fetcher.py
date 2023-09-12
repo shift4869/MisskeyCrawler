@@ -63,7 +63,7 @@ class Fetcher():
         logger.info("Create FetchedInfo -> start")
         fetched_info_list = []
         for entry in fetched_entry_list:
-            fetched_info = FetchedInfo.create(entry)
+            fetched_info = FetchedInfo.create(entry, self.misskey.instance_name)
             fetched_info_list.append(fetched_info)
         logger.info("Create FetchedInfo -> done")
         logger.info("Fetcher fetch -> done")
