@@ -27,9 +27,13 @@ class TestDownloader(unittest.TestCase):
         self.config_path.write_bytes(
             orjson.dumps(config_dict)
         )
+        self.loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(None)
 
     def tearDown(self) -> None:
         self.config_path.unlink(missing_ok=True)
+        self.loop.stop()
+        self.loop.close()
 
     def test_init(self):
         with ExitStack() as stack:
@@ -54,8 +58,7 @@ class TestDownloader(unittest.TestCase):
             media = MagicMock()
             media.url = "media_url"
             media.get_filename.return_value = filename
-            loop = asyncio.get_event_loop()
-            loop.run_until_complete(downloader.worker(media))
+            self.loop.run_until_complete(downloader.worker(media))
 
             self.assertEqual(True, (self.save_base_path / filename).exists())
             (self.save_base_path / filename).unlink(missing_ok=True)
@@ -64,7 +67,6 @@ class TestDownloader(unittest.TestCase):
         with ExitStack() as stack:
             mock_logger_info = stack.enter_context(patch.object(logger, "info"))
             mock_worker = stack.enter_context(patch("misskeycrawler.crawler.Downloader.Downloader.worker"))
-            # mock_asyncio = stack.enter_context(patch("misskeycrawler.crawler.Downloader.asyncio.gather"))
 
             async def worker(media):
                 return media
@@ -72,21 +74,18 @@ class TestDownloader(unittest.TestCase):
 
             downloader = Downloader(self.config_path)
             media_list = ["media_list"]
-            loop = asyncio.get_event_loop()
-            loop.run_until_complete(downloader.excute(media_list))
+            self.loop.run_until_complete(downloader.excute(media_list))
             mock_worker.assert_called_once_with(media_list[0])
 
     def test_download(self):
         with ExitStack() as stack:
             mock_logger_info = stack.enter_context(patch.object(logger, "info"))
             mock_excute = stack.enter_context(patch("misskeycrawler.crawler.Downloader.Downloader.excute"))
-            mock_asyncio = stack.enter_context(patch("misskeycrawler.crawler.Downloader.asyncio.run"))
 
             downloader = Downloader(self.config_path)
             media_list = ["media_list"]
             actual = downloader.download(media_list)
             mock_excute.assert_called_once_with(media_list)
-            mock_asyncio.assert_called_once()
 
 
 if __name__ == "__main__":
