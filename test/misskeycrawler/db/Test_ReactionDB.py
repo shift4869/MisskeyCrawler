@@ -39,6 +39,21 @@ class TestReactionDB(unittest.TestCase):
         record = self.get_record(1)
         self.assertEqual([record], actual)
 
+    def test_select_last_record(self):
+        controller = self.get_instance()
+        actual = controller.select_last_record()
+        self.assertEqual(None, actual)
+
+        record = self.get_record(2)
+        controller.upsert(record)
+        record = self.get_record(3)
+        controller.upsert(record)
+        record = self.get_record(1)
+        controller.upsert(record)
+        actual = controller.select_last_record()
+        expect = self.get_record(3)
+        self.assertEqual(expect, actual)
+
     def test_upsert(self):
         controller = self.get_instance()
         record1 = self.get_record(1)

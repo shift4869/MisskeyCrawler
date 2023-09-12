@@ -48,9 +48,9 @@ class TestCrawler(unittest.TestCase):
                 r = MagicMock()
                 r.reaction_id = reaction_id
                 return r
-            reaction_id_mock = [make_reaction_id_mock(i) for i in range(5)]
-            last_reaction_id = max(range(5))
-            mock_reaction_db().select.side_effect = lambda: reaction_id_mock
+            reaction_id_mock = make_reaction_id_mock(111111)
+            last_reaction_id = 111111
+            mock_reaction_db().select_last_record.side_effect = lambda: reaction_id_mock
 
             def make_fetched_list_mock(args_last_reaction_id):
                 r = MagicMock()
@@ -60,7 +60,8 @@ class TestCrawler(unittest.TestCase):
             mock_fetcher().fetch.side_effect = make_fetched_list_mock
 
             actual = self.crawler.run()
-            mock_reaction_db().select.assert_called_once_with()
+            self.assertEqual(None, actual)
+            mock_reaction_db().select_last_record.assert_called_once_with()
             mock_fetcher().fetch.assert_called_once_with(last_reaction_id)
             mock_downloader().download.assert_called_once()
             mock_reaction_db().upsert.assert_called_once()
@@ -78,7 +79,8 @@ class TestCrawler(unittest.TestCase):
             mock_fetcher().fetch.side_effect = lambda args_last_reaction_id: []
 
             actual = self.crawler.run()
-            mock_reaction_db().select.assert_called_once_with()
+            self.assertEqual(None, actual)
+            mock_reaction_db().select_last_record.assert_called_once_with()
             mock_fetcher().fetch.assert_called_once_with(last_reaction_id)
             mock_downloader().download.assert_not_called()
             mock_reaction_db().upsert.assert_not_called()

@@ -33,12 +33,19 @@ class Crawler():
 
     def run(self) -> None:
         logger.info("Crawler run -> start")
-        # 最後にリアクションをつけた日付を取得
-        reaction_list = self.reaction_db.select()
-        last_reaction_id = max(
-            [r.reaction_id for r in reaction_list]
-        )
-        logger.info(f"Last reaction id is '{last_reaction_id}'.")
+        instance_name = self.fetcher.misskey.instance_name
+
+        # reaction_id をもとに最後につけたリアクションを取得
+        last_reaction_id = ""
+        last_reaction = self.reaction_db.select_last_record()
+        if last_reaction:
+            last_reaction_id = last_reaction.reaction_id
+            last_note_id = last_reaction.note_id
+            last_note_url = f"https://{instance_name}/notes/{last_note_id}"
+            logger.info(f"Last reaction id is '{last_reaction_id}'.")
+            logger.info(f"Last note url is '{last_note_url}'.")
+        else:
+            logger.info(f"Last reaction is not exist, first run.")
 
         # fetch
         start_time = time.time()

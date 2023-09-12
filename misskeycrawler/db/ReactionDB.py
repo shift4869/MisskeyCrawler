@@ -1,4 +1,4 @@
-from sqlalchemy import and_
+from sqlalchemy import and_, desc
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -10,10 +10,17 @@ class ReactionDB(Base):
     def __init__(self, db_path: str = "mc_db.db"):
         super().__init__(db_path)
 
-    def select(self):
+    def select(self) -> list[Reaction]:
         Session = sessionmaker(bind=self.engine, autoflush=False)
         session = Session()
         result = session.query(Reaction).all()
+        session.close()
+        return result
+
+    def select_last_record(self) -> Reaction | None:
+        Session = sessionmaker(bind=self.engine, autoflush=False)
+        session = Session()
+        result = session.query(Reaction).order_by(desc(Reaction.reaction_id)).first()
         session.close()
         return result
 
