@@ -1,1 +1,2 @@
 *.json
+!config_sample.json

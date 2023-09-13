@@ -1,0 +1,8 @@
+{
+  "misskey": {
+    "instance": "misskey.io",
+    "token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "save_base_path": "%userprofile%/Pictures/MC_Misskey",
+    "save_num": -1
+  }
+}

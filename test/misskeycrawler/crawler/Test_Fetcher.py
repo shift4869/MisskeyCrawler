@@ -20,6 +20,7 @@ class TestFetcher(unittest.TestCase):
     def setUp(self) -> None:
         config_dict = {
             "misskey": {
+                "instance": "misskey.io",
                 "token": "misskey_token",
             }
         }

@@ -21,7 +21,8 @@ class Fetcher():
     def __init__(self, config_path: Path, is_debug: bool = False) -> None:
         logger.info("Fetcher init -> start")
         config_dict = orjson.loads(config_path.read_bytes())
-        self.misskey = Misskey("misskey.io", config_dict["misskey"]["token"])
+        instance_name = config_dict["misskey"]["instance"]
+        self.misskey = Misskey(instance_name, config_dict["misskey"]["token"])
         self.is_debug = is_debug
 
         self.cache_path.mkdir(parents=True, exist_ok=True)

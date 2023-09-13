@@ -52,7 +52,8 @@ if __name__ == "__main__":
     logging.config.fileConfig("./log/logging.ini", disable_existing_loggers=False)
     config_path: Path = Path("./config/config.json")
     config_dict = orjson.loads(config_path.read_bytes())
+    instance_name = config_dict["misskey"]["instance"]
     token = config_dict["misskey"]["token"]
-    misskey = Misskey("misskey.io", token)
+    misskey = Misskey(instance_name, token)
     response = misskey.notes_with_reactions()
     pprint.pprint(response)
