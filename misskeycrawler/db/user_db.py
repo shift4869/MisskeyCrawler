@@ -2,8 +2,8 @@ from sqlalchemy import and_
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
 
-from misskeycrawler.db.Base import Base
-from misskeycrawler.db.Model import User
+from misskeycrawler.db.base import Base
+from misskeycrawler.db.model import User
 
 
 class UserDB(Base):

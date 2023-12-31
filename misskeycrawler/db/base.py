@@ -3,7 +3,7 @@ from abc import ABCMeta, abstractmethod
 from sqlalchemy import create_engine
 from sqlalchemy.pool import StaticPool
 
-from misskeycrawler.db.Model import Base as ModelBase
+from misskeycrawler.db.model import Base as ModelBase
 
 
 class Base(metaclass=ABCMeta):

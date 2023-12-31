@@ -9,9 +9,9 @@ import freezegun
 import orjson
 from mock import patch
 
-from misskeycrawler.crawler.Fetcher import Fetcher
+from misskeycrawler.crawler.fetcher import Fetcher
 
-logger = getLogger("misskeycrawler.crawler.Fetcher")
+logger = getLogger("misskeycrawler.crawler.fetcher")
 
 
 class TestFetcher(unittest.TestCase):
@@ -32,7 +32,7 @@ class TestFetcher(unittest.TestCase):
     def test_init(self):
         with ExitStack() as stack:
             mock_logger_info = stack.enter_context(patch.object(logger, "info"))
-            mock_misskey = stack.enter_context(patch("misskeycrawler.crawler.Fetcher.Misskey"))
+            mock_misskey = stack.enter_context(patch("misskeycrawler.crawler.fetcher.Misskey"))
             fetcher = Fetcher(self.config_path)
             mock_misskey.assert_called_once_with("misskey.io", "misskey_token")
             self.assertEqual(False, fetcher.is_debug)
@@ -41,8 +41,8 @@ class TestFetcher(unittest.TestCase):
         with ExitStack() as stack:
             freeze_gun = stack.enter_context(freezegun.freeze_time("2023/09/11 00:00:00"))
             mock_logger_info = stack.enter_context(patch.object(logger, "info"))
-            mock_misskey = stack.enter_context(patch("misskeycrawler.crawler.Fetcher.Misskey"))
-            mock_fetched_info = stack.enter_context(patch("misskeycrawler.crawler.Fetcher.FetchedInfo"))
+            mock_misskey = stack.enter_context(patch("misskeycrawler.crawler.fetcher.Misskey"))
+            mock_fetched_info = stack.enter_context(patch("misskeycrawler.crawler.fetcher.FetchedInfo"))
 
             mock_misskey().notes_with_reactions.side_effect = lambda limit, last_since_id: ["fetched_entry"]
             mock_misskey().instance_name = "misskey.io"

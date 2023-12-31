@@ -5,8 +5,8 @@ from pathlib import Path
 
 import orjson
 
-from misskeycrawler.crawler.valueobject.FetchedInfo import FetchedInfo
-from misskeycrawler.misskey.Misskey import Misskey
+from misskeycrawler.crawler.valueobject.fetched_info import FetchedInfo
+from misskeycrawler.misskey.misskey import Misskey
 
 logger = getLogger(__name__)
 logger.setLevel(INFO)

@@ -5,9 +5,9 @@ from pathlib import Path
 
 import orjson
 
-from misskeycrawler.crawler.valueobject.FetchedInfo import FetchedInfo
-from misskeycrawler.db.Model import Media, Note, Reaction, User
-from misskeycrawler.Util import find_values, to_jst
+from misskeycrawler.crawler.valueobject.fetched_info import FetchedInfo
+from misskeycrawler.db.model import Media, Note, Reaction, User
+from misskeycrawler.util import find_values, to_jst
 
 
 class TestFetchedInfo(unittest.TestCase):

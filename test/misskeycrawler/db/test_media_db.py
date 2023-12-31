@@ -3,8 +3,8 @@ import unittest
 from datetime import datetime
 from typing import Literal
 
-from misskeycrawler.db.MediaDB import MediaDB
-from misskeycrawler.db.Model import Media
+from misskeycrawler.db.media_db import MediaDB
+from misskeycrawler.db.model import Media
 
 
 class TestMediaDB(unittest.TestCase):

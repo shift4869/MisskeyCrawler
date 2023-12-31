@@ -6,9 +6,9 @@ from unittest.mock import MagicMock
 
 from mock import patch
 
-from misskeycrawler.misskey.Misskey import Misskey
+from misskeycrawler.misskey.misskey import Misskey
 
-logger = getLogger("misskeycrawler.misskey.Misskey")
+logger = getLogger("misskeycrawler.misskey.misskey")
 
 
 class TestMisskey(unittest.TestCase):
@@ -19,14 +19,14 @@ class TestMisskey(unittest.TestCase):
     def get_instance(self) -> Misskey:
         with ExitStack() as stack:
             mock_logger_info = stack.enter_context(patch.object(logger, "info"))
-            mock_misskey = stack.enter_context(patch("misskeycrawler.misskey.Misskey.Mk"))
+            mock_misskey = stack.enter_context(patch("misskeycrawler.misskey.misskey.Mk"))
             misskey = Misskey(self.instance_name, self.token)
             return misskey
 
     def test_init(self):
         with ExitStack() as stack:
             mock_logger_info = stack.enter_context(patch.object(logger, "info"))
-            mock_misskey = stack.enter_context(patch("misskeycrawler.misskey.Misskey.Mk"))
+            mock_misskey = stack.enter_context(patch("misskeycrawler.misskey.misskey.Mk"))
             misskey = Misskey(self.instance_name, self.token)
             mock_misskey.assert_called_once_with(self.instance_name, i=self.token)
             self.assertEqual(self.instance_name, misskey.instance_name)
@@ -56,7 +56,7 @@ class TestMisskey(unittest.TestCase):
 
     def test_notes_with_reactions(self):
         with ExitStack() as stack:
-            mock_run = stack.enter_context(patch("misskeycrawler.misskey.Misskey.Misskey._run"))
+            mock_run = stack.enter_context(patch("misskeycrawler.misskey.misskey.Misskey._run"))
             mock_run.side_effect = lambda path, params: params
 
             misskey = self.get_instance()

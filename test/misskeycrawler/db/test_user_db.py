@@ -3,8 +3,8 @@ import unittest
 from datetime import datetime
 from typing import Literal
 
-from misskeycrawler.db.Model import User
-from misskeycrawler.db.UserDB import UserDB
+from misskeycrawler.db.model import User
+from misskeycrawler.db.user_db import UserDB
 
 
 class TestUserDB(unittest.TestCase):

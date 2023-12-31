@@ -6,8 +6,8 @@ from typing import Self
 
 import orjson
 
-from misskeycrawler.db.Model import Media, Note, Reaction, User
-from misskeycrawler.Util import find_values, to_jst
+from misskeycrawler.db.model import Media, Note, Reaction, User
+from misskeycrawler.util import find_values, to_jst
 
 
 @dataclass(frozen=True)

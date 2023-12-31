@@ -3,8 +3,8 @@ import unittest
 from datetime import datetime
 from typing import Literal
 
-from misskeycrawler.db.Model import Reaction
-from misskeycrawler.db.ReactionDB import ReactionDB
+from misskeycrawler.db.model import Reaction
+from misskeycrawler.db.reaction_db import ReactionDB
 
 
 class TestReactionDB(unittest.TestCase):

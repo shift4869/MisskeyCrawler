@@ -8,9 +8,9 @@ from pathlib import Path
 import orjson
 from mock import AsyncMock, MagicMock, patch
 
-from misskeycrawler.crawler.Downloader import Downloader
+from misskeycrawler.crawler.downloader import Downloader
 
-logger = getLogger("misskeycrawler.crawler.Downloader")
+logger = getLogger("misskeycrawler.crawler.downloader")
 
 
 class TestDownloader(unittest.TestCase):
@@ -43,7 +43,7 @@ class TestDownloader(unittest.TestCase):
     def test_worker(self):
         with ExitStack() as stack:
             mock_logger_info = stack.enter_context(patch.object(logger, "info"))
-            mock_client = stack.enter_context(patch("misskeycrawler.crawler.Downloader.httpx.AsyncClient.get"))
+            mock_client = stack.enter_context(patch("misskeycrawler.crawler.downloader.httpx.AsyncClient.get"))
 
             async def get_mock(url: str):
                 r = MagicMock()
@@ -65,7 +65,7 @@ class TestDownloader(unittest.TestCase):
     def test_excute(self):
         with ExitStack() as stack:
             mock_logger_info = stack.enter_context(patch.object(logger, "info"))
-            mock_worker = stack.enter_context(patch("misskeycrawler.crawler.Downloader.Downloader.worker"))
+            mock_worker = stack.enter_context(patch("misskeycrawler.crawler.downloader.Downloader.worker"))
 
             async def worker(media):
                 return media
@@ -80,7 +80,7 @@ class TestDownloader(unittest.TestCase):
     def test_download(self):
         with ExitStack() as stack:
             mock_logger_info = stack.enter_context(patch.object(logger, "info"))
-            mock_excute = stack.enter_context(patch("misskeycrawler.crawler.Downloader.Downloader.excute"))
+            mock_excute = stack.enter_context(patch("misskeycrawler.crawler.downloader.Downloader.excute"))
 
             downloader = Downloader(self.config_path)
             media_list = ["media_list"]

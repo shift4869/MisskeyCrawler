@@ -6,7 +6,7 @@ from pathlib import Path
 import httpx
 import orjson
 
-from misskeycrawler.db.Model import Media
+from misskeycrawler.db.model import Media
 
 logger = getLogger(__name__)
 logger.setLevel(INFO)

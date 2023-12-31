@@ -1,6 +1,6 @@
 from logging import getLogger
 
-from misskeycrawler.crawler.Crawler import Crawler
+from misskeycrawler.crawler.crawler import Crawler
 
 logger = getLogger(__name__)
 

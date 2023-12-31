@@ -7,7 +7,7 @@ from pathlib import Path
 import freezegun
 import orjson
 
-from misskeycrawler.Util import find_values, to_jst
+from misskeycrawler.util import find_values, to_jst
 
 
 class TestUtil(unittest.TestCase):

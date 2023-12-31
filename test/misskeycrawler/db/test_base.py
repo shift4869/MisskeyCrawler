@@ -5,7 +5,7 @@ from contextlib import ExitStack
 from mock import patch
 from sqlalchemy.pool import StaticPool
 
-from misskeycrawler.db.Base import Base
+from misskeycrawler.db.base import Base
 
 
 class ConcreteBase(Base):
@@ -19,8 +19,8 @@ class ConcreteBase(Base):
 class TestBase(unittest.TestCase):
     def test_init(self):
         with ExitStack() as stack:
-            mock_create_engine = stack.enter_context(patch("misskeycrawler.db.Base.create_engine"))
-            mock_model_base = stack.enter_context(patch("misskeycrawler.db.Base.ModelBase"))
+            mock_create_engine = stack.enter_context(patch("misskeycrawler.db.base.create_engine"))
+            mock_model_base = stack.enter_context(patch("misskeycrawler.db.base.ModelBase"))
 
             mock_create_engine.return_value = "created_engine"
 

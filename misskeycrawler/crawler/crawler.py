@@ -2,13 +2,13 @@ import time
 from logging import getLogger
 from pathlib import Path
 
-from misskeycrawler.crawler.Downloader import Downloader
-from misskeycrawler.crawler.Fetcher import Fetcher
-from misskeycrawler.crawler.valueobject.FetchedInfo import FetchedInfo
-from misskeycrawler.db.MediaDB import MediaDB
-from misskeycrawler.db.NoteDB import NoteDB
-from misskeycrawler.db.ReactionDB import ReactionDB
-from misskeycrawler.db.UserDB import UserDB
+from misskeycrawler.crawler.downloader import Downloader
+from misskeycrawler.crawler.fetcher import Fetcher
+from misskeycrawler.crawler.valueobject.fetched_info import FetchedInfo
+from misskeycrawler.db.media_db import MediaDB
+from misskeycrawler.db.note_db import NoteDB
+from misskeycrawler.db.reaction_db import ReactionDB
+from misskeycrawler.db.user_db import UserDB
 
 logger = getLogger(__name__)
 

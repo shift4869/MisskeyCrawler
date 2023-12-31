@@ -5,9 +5,9 @@ from logging import getLogger
 
 from mock import MagicMock, patch
 
-from misskeycrawler.crawler.Crawler import Crawler
+from misskeycrawler.crawler.crawler import Crawler
 
-logger = getLogger("misskeycrawler.crawler.Crawler")
+logger = getLogger("misskeycrawler.crawler.crawler")
 
 
 class TestCrawler(unittest.TestCase):
@@ -17,12 +17,12 @@ class TestCrawler(unittest.TestCase):
     def test_init(self):
         with ExitStack() as stack:
             mock_logger_info = stack.enter_context(patch.object(logger, "info"))
-            mock_fetcher = stack.enter_context(patch("misskeycrawler.crawler.Crawler.Fetcher"))
-            mock_downloader = stack.enter_context(patch("misskeycrawler.crawler.Crawler.Downloader"))
-            mock_reaction_db = stack.enter_context(patch("misskeycrawler.crawler.Crawler.ReactionDB"))
-            mock_note_db = stack.enter_context(patch("misskeycrawler.crawler.Crawler.NoteDB"))
-            mock_user_db = stack.enter_context(patch("misskeycrawler.crawler.Crawler.UserDB"))
-            mock_media_db = stack.enter_context(patch("misskeycrawler.crawler.Crawler.MediaDB"))
+            mock_fetcher = stack.enter_context(patch("misskeycrawler.crawler.crawler.Fetcher"))
+            mock_downloader = stack.enter_context(patch("misskeycrawler.crawler.crawler.Downloader"))
+            mock_reaction_db = stack.enter_context(patch("misskeycrawler.crawler.crawler.ReactionDB"))
+            mock_note_db = stack.enter_context(patch("misskeycrawler.crawler.crawler.NoteDB"))
+            mock_user_db = stack.enter_context(patch("misskeycrawler.crawler.crawler.UserDB"))
+            mock_media_db = stack.enter_context(patch("misskeycrawler.crawler.crawler.MediaDB"))
 
             self.crawler = Crawler()
             mock_fetcher.assert_called_once_with(self.crawler.config_path)
@@ -35,12 +35,12 @@ class TestCrawler(unittest.TestCase):
     def test_run(self):
         with ExitStack() as stack:
             mock_logger_info = stack.enter_context(patch.object(logger, "info"))
-            mock_fetcher = stack.enter_context(patch("misskeycrawler.crawler.Crawler.Fetcher"))
-            mock_downloader = stack.enter_context(patch("misskeycrawler.crawler.Crawler.Downloader"))
-            mock_reaction_db = stack.enter_context(patch("misskeycrawler.crawler.Crawler.ReactionDB"))
-            mock_note_db = stack.enter_context(patch("misskeycrawler.crawler.Crawler.NoteDB"))
-            mock_user_db = stack.enter_context(patch("misskeycrawler.crawler.Crawler.UserDB"))
-            mock_media_db = stack.enter_context(patch("misskeycrawler.crawler.Crawler.MediaDB"))
+            mock_fetcher = stack.enter_context(patch("misskeycrawler.crawler.crawler.Fetcher"))
+            mock_downloader = stack.enter_context(patch("misskeycrawler.crawler.crawler.Downloader"))
+            mock_reaction_db = stack.enter_context(patch("misskeycrawler.crawler.crawler.ReactionDB"))
+            mock_note_db = stack.enter_context(patch("misskeycrawler.crawler.crawler.NoteDB"))
+            mock_user_db = stack.enter_context(patch("misskeycrawler.crawler.crawler.UserDB"))
+            mock_media_db = stack.enter_context(patch("misskeycrawler.crawler.crawler.MediaDB"))
 
             self.crawler = Crawler()
 

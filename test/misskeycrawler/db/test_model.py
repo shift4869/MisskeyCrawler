@@ -4,7 +4,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Literal
 
-from misskeycrawler.db.Model import Media, Note, Reaction, User
+from misskeycrawler.db.model import Media, Note, Reaction, User
 
 
 class TestModel(unittest.TestCase):
