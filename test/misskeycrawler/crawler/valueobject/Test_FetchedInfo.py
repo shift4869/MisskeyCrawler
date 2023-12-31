@@ -13,18 +13,12 @@ from misskeycrawler.Util import find_values, to_jst
 class TestFetchedInfo(unittest.TestCase):
     def setUp(self) -> None:
         self.cache_filepath = Path("./test/misskeycrawler/cache/test_notes_with_reactions.json")
-        self.fetched_entry_list = orjson.loads(
-            self.cache_filepath.read_bytes()
-        ).get("result")
+        self.fetched_entry_list = orjson.loads(self.cache_filepath.read_bytes()).get("result")
         return super().setUp()
 
     def expect_create(self, fetched_dict: dict, instance_name: str = "") -> FetchedInfo:
         def normalize_date_at(date_at_str: str) -> str:
-            result = to_jst(
-                datetime.fromisoformat(
-                    date_at_str
-                )
-            ).isoformat()
+            result = to_jst(datetime.fromisoformat(date_at_str)).isoformat()
             if result.endswith("+00:00"):
                 result = result[:-6]
             return result
@@ -44,9 +38,7 @@ class TestFetchedInfo(unittest.TestCase):
             media_md5 = find_values(media_dict, "md5", True, [""])
             media_size = find_values(media_dict, "size", True, [""])
             media_url = find_values(media_dict, "url", True, [""])
-            media_created_at = normalize_date_at(
-                find_values(media_dict, "createdAt", True, [""])
-            )
+            media_created_at = normalize_date_at(find_values(media_dict, "createdAt", True, [""]))
             media = Media.create({
                 "note_id": note_id,
                 "media_id": media_id,
@@ -62,9 +54,7 @@ class TestFetchedInfo(unittest.TestCase):
 
         reaction_id = find_values(fetched_dict, "id", True, [""])
         reaction_type = find_values(fetched_dict, "type", True, [""])
-        reaction_created_at = normalize_date_at(
-            find_values(fetched_dict, "createdAt", True, [""])
-        )
+        reaction_created_at = normalize_date_at(find_values(fetched_dict, "createdAt", True, [""]))
         reaction = Reaction.create({
             "note_id": note_id,
             "reaction_id": reaction_id,
@@ -76,9 +66,7 @@ class TestFetchedInfo(unittest.TestCase):
         user_id = find_values(note_dict, "userId", True, [""])
         note_url = f"https://{instance_name}/notes/{note_id}"
         note_text = find_values(note_dict, "text", True, [""])
-        note_created_at = normalize_date_at(
-            find_values(note_dict, "createdAt", True, [""])
-        )
+        note_created_at = normalize_date_at(find_values(note_dict, "createdAt", True, [""]))
         note = Note.create({
             "note_id": note_id,
             "user_id": user_id,

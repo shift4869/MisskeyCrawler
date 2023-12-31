@@ -19,7 +19,7 @@ class Base(metaclass=ABCMeta):
             connect_args={
                 "timeout": 30,
                 "check_same_thread": False,
-            }
+            },
         )
         ModelBase.metadata.create_all(self.engine)
 

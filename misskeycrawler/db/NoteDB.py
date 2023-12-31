@@ -44,9 +44,7 @@ class NoteDB(Base):
 
         for r in record_list:
             try:
-                q = session.query(Note).filter(
-                    and_(Note.note_id == r.note_id)
-                ).with_for_update()
+                q = session.query(Note).filter(and_(Note.note_id == r.note_id)).with_for_update()
                 p = q.one()
             except NoResultFound:
                 # INSERT

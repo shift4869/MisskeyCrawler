@@ -51,9 +51,11 @@ class ReactionDB(Base):
 
         for r in record_list:
             try:
-                q = session.query(Reaction).filter(
-                    and_(Reaction.note_id == r.note_id, Reaction.reaction_id == r.reaction_id)
-                ).with_for_update()
+                q = (
+                    session.query(Reaction)
+                    .filter(and_(Reaction.note_id == r.note_id, Reaction.reaction_id == r.reaction_id))
+                    .with_for_update()
+                )
                 p = q.one()
             except NoResultFound:
                 # INSERT

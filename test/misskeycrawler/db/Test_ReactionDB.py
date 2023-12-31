@@ -12,7 +12,9 @@ class TestReactionDB(unittest.TestCase):
         controller = ReactionDB(db_path=":memory:")
         return controller
 
-    def get_record(self, id_num: int, type_kind: Literal["record", "list", "dict"] = "record") -> Reaction | list[Reaction] | list[dict]:
+    def get_record(
+        self, id_num: int, type_kind: Literal["record", "list", "dict"] = "record"
+    ) -> Reaction | list[Reaction] | list[dict]:
         now_date = datetime.now().isoformat()
         arg_dict = {
             "note_id": f"note_id_{id_num}",

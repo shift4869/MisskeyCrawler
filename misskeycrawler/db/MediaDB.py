@@ -44,9 +44,11 @@ class MediaDB(Base):
 
         for r in record_list:
             try:
-                q = session.query(Media).filter(
-                    and_(Media.media_id == r.media_id, Media.note_id == r.note_id)
-                ).with_for_update()
+                q = (
+                    session.query(Media)
+                    .filter(and_(Media.media_id == r.media_id, Media.note_id == r.note_id))
+                    .with_for_update()
+                )
                 p = q.one()
             except NoResultFound:
                 # INSERT

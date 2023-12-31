@@ -11,26 +11,19 @@ from misskeycrawler.Util import find_values, to_jst
 
 
 @dataclass(frozen=True)
-class FetchedInfo():
+class FetchedInfo:
     reaction: Reaction
     note: Note
     user: User
     media_list: list[Media]
 
     def get_records(self) -> list[tuple[Reaction, Note, User, Media]]:
-        return [
-            (self.reaction, self.note, self.user, media)
-            for media in self.media_list
-        ]
+        return [(self.reaction, self.note, self.user, media) for media in self.media_list]
 
     @classmethod
     def create(cls, fetched_dict: dict, instance_name: str = "") -> Self:
         def normalize_date_at(date_at_str: str) -> str:
-            result = to_jst(
-                datetime.fromisoformat(
-                    date_at_str
-                )
-            ).isoformat()
+            result = to_jst(datetime.fromisoformat(date_at_str)).isoformat()
             if result.endswith("+00:00"):
                 result = result[:-6]
             return result
@@ -53,9 +46,7 @@ class FetchedInfo():
             media_md5 = find_values(media_dict, "md5", True, [""])
             media_size = find_values(media_dict, "size", True, [""])
             media_url = find_values(media_dict, "url", True, [""])
-            media_created_at = normalize_date_at(
-                find_values(media_dict, "createdAt", True, [""])
-            )
+            media_created_at = normalize_date_at(find_values(media_dict, "createdAt", True, [""]))
             media = Media.create({
                 "note_id": note_id,
                 "media_id": media_id,
@@ -71,9 +62,7 @@ class FetchedInfo():
 
         reaction_id = find_values(fetched_dict, "id", True, [""])
         reaction_type = find_values(fetched_dict, "type", True, [""])
-        reaction_created_at = normalize_date_at(
-            find_values(fetched_dict, "createdAt", True, [""])
-        )
+        reaction_created_at = normalize_date_at(find_values(fetched_dict, "createdAt", True, [""]))
         reaction = Reaction.create({
             "note_id": note_id,
             "reaction_id": reaction_id,
@@ -85,9 +74,7 @@ class FetchedInfo():
         user_id = find_values(note_dict, "userId", True, [""])
         note_url = f"https://{instance_name}/notes/{note_id}"
         note_text = find_values(note_dict, "text", True, [""])
-        note_created_at = normalize_date_at(
-            find_values(note_dict, "createdAt", True, [""])
-        )
+        note_created_at = normalize_date_at(find_values(note_dict, "createdAt", True, [""]))
         note = Note.create({
             "note_id": note_id,
             "user_id": user_id,
@@ -123,9 +110,7 @@ if __name__ == "__main__":
         pprint.pprint("Cache file is not exist.")
         exit(-1)
     load_path: Path = load_paths[-1]
-    fetched_entry_list: list[dict] = orjson.loads(
-        load_path.read_bytes()
-    ).get("result")
+    fetched_entry_list: list[dict] = orjson.loads(load_path.read_bytes()).get("result")
     for entry in fetched_entry_list[:3]:
         fetched_info = FetchedInfo.create(entry)
         pprint.pprint(fetched_info)

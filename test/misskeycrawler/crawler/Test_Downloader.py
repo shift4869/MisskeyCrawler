@@ -24,9 +24,7 @@ class TestDownloader(unittest.TestCase):
                 "save_num": -1,
             }
         }
-        self.config_path.write_bytes(
-            orjson.dumps(config_dict)
-        )
+        self.config_path.write_bytes(orjson.dumps(config_dict))
         self.loop = asyncio.new_event_loop()
         asyncio.set_event_loop(None)
 
@@ -51,6 +49,7 @@ class TestDownloader(unittest.TestCase):
                 r = MagicMock()
                 r.content = url.encode()
                 return r
+
             mock_client.side_effect = get_mock
 
             downloader = Downloader(self.config_path)
@@ -70,6 +69,7 @@ class TestDownloader(unittest.TestCase):
 
             async def worker(media):
                 return media
+
             mock_worker.side_effect = worker
 
             downloader = Downloader(self.config_path)

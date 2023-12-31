@@ -1,5 +1,5 @@
-from pathlib import Path
 import re
+from pathlib import Path
 from typing import Self
 
 from sqlalchemy import Boolean, Column, Integer, String, create_engine
@@ -10,12 +10,12 @@ Base = declarative_base()
 
 class Reaction(Base):
     """リアクションモデル
-        [id] INTEGER NOT NULL UNIQUE,
-        [note_id] TEXT NOT NULL UNIQUE,
-        [reaction_id] TEXT NOT NULL,
-        [type] TEXT NOT NULL,
-        [created_at] TEXT NOT NULL,
-        PRIMARY KEY([id])
+    [id] INTEGER NOT NULL UNIQUE,
+    [note_id] TEXT NOT NULL UNIQUE,
+    [reaction_id] TEXT NOT NULL,
+    [type] TEXT NOT NULL,
+    [created_at] TEXT NOT NULL,
+    PRIMARY KEY([id])
     """
 
     __tablename__ = "Reaction"
@@ -27,12 +27,7 @@ class Reaction(Base):
     created_at = Column(String(256), nullable=False)
     registered_at = Column(String(256), nullable=False)
 
-    def __init__(self,
-                 note_id: str,
-                 reaction_id: str,
-                 type: str,
-                 created_at: str,
-                 registered_at: str):
+    def __init__(self, note_id: str, reaction_id: str, type: str, created_at: str, registered_at: str):
         # self.id = id
         self.note_id = note_id
         self.reaction_id = reaction_id
@@ -50,13 +45,7 @@ class Reaction(Base):
                 "created_at": created_at,
                 "registered_at": registered_at,
             }:
-                return Reaction(
-                    note_id,
-                    reaction_id,
-                    type,
-                    created_at,
-                    registered_at
-                )
+                return Reaction(note_id, reaction_id, type, created_at, registered_at)
             case _:
                 raise ValueError("Unmatch args_dict.")
 
@@ -78,14 +67,14 @@ class Reaction(Base):
 
 class Note(Base):
     """ノートモデル
-        [id] INTEGER NOT NULL UNIQUE,
-        [note_id] TEXT NOT NULL UNIQUE,
-        [user_id] TEXT NOT NULL,
-        [url] TEXT NOT NULL,
-        [text] TEXT,
-        [created_at] TEXT NOT NULL,
-        [registered_at] TEXT NOT NULL,
-        PRIMARY KEY([id])
+    [id] INTEGER NOT NULL UNIQUE,
+    [note_id] TEXT NOT NULL UNIQUE,
+    [user_id] TEXT NOT NULL,
+    [url] TEXT NOT NULL,
+    [text] TEXT,
+    [created_at] TEXT NOT NULL,
+    [registered_at] TEXT NOT NULL,
+    PRIMARY KEY([id])
     """
 
     __tablename__ = "Note"
@@ -98,13 +87,7 @@ class Note(Base):
     created_at = Column(String(256), nullable=False)
     registered_at = Column(String(256), nullable=False)
 
-    def __init__(self,
-                 note_id: str,
-                 user_id: str,
-                 url: str,
-                 text: str,
-                 created_at: str,
-                 registered_at: str):
+    def __init__(self, note_id: str, user_id: str, url: str, text: str, created_at: str, registered_at: str):
         # self.id = id
         self.note_id = note_id
         self.user_id = user_id
@@ -124,14 +107,7 @@ class Note(Base):
                 "created_at": created_at,
                 "registered_at": registered_at,
             }:
-                return Note(
-                    note_id,
-                    user_id,
-                    url,
-                    text,
-                    created_at,
-                    registered_at
-                )
+                return Note(note_id, user_id, url, text, created_at, registered_at)
             case _:
                 raise ValueError("Unmatch args_dict.")
 
@@ -154,15 +130,15 @@ class Note(Base):
 
 class User(Base):
     """ユーザーモデル
-        [id] INTEGER NOT NULL UNIQUE,
-        [user_id] TEXT NOT NULL UNIQUE,
-        [name] TEXT,
-        [username] TEXT NOT NULL,
-        [avatar_url] TEXT,
-        [is_bot] BOOL,
-        [is_cat] BOOL,
-        [registered_at] TEXT NOT NULL,
-        PRIMARY KEY([id])
+    [id] INTEGER NOT NULL UNIQUE,
+    [user_id] TEXT NOT NULL UNIQUE,
+    [name] TEXT,
+    [username] TEXT NOT NULL,
+    [avatar_url] TEXT,
+    [is_bot] BOOL,
+    [is_cat] BOOL,
+    [registered_at] TEXT NOT NULL,
+    PRIMARY KEY([id])
     """
 
     __tablename__ = "User"
@@ -176,14 +152,9 @@ class User(Base):
     is_cat = Column(Boolean)
     registered_at = Column(String(256), nullable=False)
 
-    def __init__(self,
-                 user_id: str,
-                 name: str,
-                 username: str,
-                 avatar_url: str,
-                 is_bot: bool,
-                 is_cat: bool,
-                 registered_at: str):
+    def __init__(
+        self, user_id: str, name: str, username: str, avatar_url: str, is_bot: bool, is_cat: bool, registered_at: str
+    ):
         # self.id = id
         self.user_id = user_id
         self.name = name
@@ -205,13 +176,7 @@ class User(Base):
                 "is_cat": is_cat,
                 "registered_at": registered_at,
             }:
-                return User(user_id,
-                            name,
-                            username,
-                            avatar_url,
-                            is_bot,
-                            is_cat,
-                            registered_at)
+                return User(user_id, name, username, avatar_url, is_bot, is_cat, registered_at)
             case _:
                 raise ValueError("Unmatch args_dict.")
 
@@ -235,17 +200,17 @@ class User(Base):
 
 class Media(Base):
     """メディアモデル
-        [id] INTEGER NOT NULL UNIQUE,
-        [note_id] TEXT NOT NULL,
-        [media_id] TEXT NOT NULL UNIQUE,
-        [name] TEXT,
-        [type] TEXT NOT NULL,
-        [md5] TEXT NOT NULL,
-        [size] INTEGER NOT NULL,
-        [url] TEXT NOT NULL,
-        [created_at] TEXT NOT NULL,
-        [registered_at] TEXT NOT NULL,
-        PRIMARY KEY([id])
+    [id] INTEGER NOT NULL UNIQUE,
+    [note_id] TEXT NOT NULL,
+    [media_id] TEXT NOT NULL UNIQUE,
+    [name] TEXT,
+    [type] TEXT NOT NULL,
+    [md5] TEXT NOT NULL,
+    [size] INTEGER NOT NULL,
+    [url] TEXT NOT NULL,
+    [created_at] TEXT NOT NULL,
+    [registered_at] TEXT NOT NULL,
+    PRIMARY KEY([id])
     """
 
     __tablename__ = "Media"
@@ -261,16 +226,18 @@ class Media(Base):
     created_at = Column(String(256), nullable=False)
     registered_at = Column(String(256), nullable=False)
 
-    def __init__(self,
-                 note_id: str,
-                 media_id: str,
-                 name: str,
-                 type: str,
-                 md5: str,
-                 size: int,
-                 url: str,
-                 created_at: str,
-                 registered_at: str):
+    def __init__(
+        self,
+        note_id: str,
+        media_id: str,
+        name: str,
+        type: str,
+        md5: str,
+        size: int,
+        url: str,
+        created_at: str,
+        registered_at: str,
+    ):
         # self.id = id
         self.note_id = note_id
         self.media_id = media_id
@@ -296,15 +263,7 @@ class Media(Base):
                 "created_at": created_at,
                 "registered_at": registered_at,
             }:
-                return Media(note_id,
-                             media_id,
-                             name,
-                             type,
-                             md5,
-                             size,
-                             url,
-                             created_at,
-                             registered_at)
+                return Media(note_id, media_id, name, type, md5, size, url, created_at, registered_at)
             case _:
                 raise ValueError("Unmatch args_dict.")
 
@@ -329,16 +288,16 @@ class Media(Base):
 
     def get_filename(self) -> str:
         ext = ""
-        if re.search("^\..+$", (ext1 := Path(self.url).suffix)):
+        if re.search(r"^\..+$", (ext1 := Path(self.url).suffix)):
             ext = ext1
-        elif re.search("^.+?/.+$", (ext2 := self.type)):
+        elif re.search(r"^.+?/.+$", (ext2 := self.type)):
             ext = "." + ext2.split("/")[1]
             if ext.startswith(".x-"):
                 ext = "." + ext[3:]
-        elif re.search("^\..+$", (ext3 := Path(self.name).suffix)):
+        elif re.search(r"^\..+$", (ext3 := Path(self.name).suffix)):
             ext = ext3
 
-        if not re.search("^\..+$", ext):
+        if not re.search(r"^\..+$", ext):
             raise ValueError("failed to get filename, invalid extension.")
 
         name = Path(self.name).with_suffix(ext).name
@@ -346,9 +305,6 @@ class Media(Base):
 
 
 if __name__ == "__main__":
-    from sqlalchemy import create_engine
-    from sqlalchemy.orm import Session
-
     test_db = Path("./test_DB.db")
     test_db.unlink(missing_ok=True)
     engine = create_engine(f"sqlite:///{test_db.name}", echo=True)

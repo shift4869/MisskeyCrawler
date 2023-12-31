@@ -12,7 +12,9 @@ class TestNoteDB(unittest.TestCase):
         controller = NoteDB(db_path=":memory:")
         return controller
 
-    def get_record(self, id_num: int, type_kind: Literal["record", "list", "dict"] = "record") -> Note | list[Note] | list[dict]:
+    def get_record(
+        self, id_num: int, type_kind: Literal["record", "list", "dict"] = "record"
+    ) -> Note | list[Note] | list[dict]:
         now_date = datetime.now().isoformat()
         arg_dict = {
             "note_id": f"note_id_{id_num}",

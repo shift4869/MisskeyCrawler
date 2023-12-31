@@ -1,4 +1,3 @@
-
 import logging.config
 import pprint
 from logging import INFO, getLogger
@@ -11,7 +10,7 @@ logger = getLogger(__name__)
 logger.setLevel(INFO)
 
 
-class Misskey():
+class Misskey:
     instance_name: str
     token: str
     misskey: Mk

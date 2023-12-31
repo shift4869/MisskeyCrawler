@@ -1,4 +1,3 @@
-
 import pprint
 from datetime import datetime
 from logging import INFO, getLogger
@@ -13,7 +12,7 @@ logger = getLogger(__name__)
 logger.setLevel(INFO)
 
 
-class Fetcher():
+class Fetcher:
     misskey: Misskey
     is_debug: bool
     cache_path = Path("./misskeycrawler/cache/")
@@ -27,15 +26,13 @@ class Fetcher():
 
         self.cache_path.mkdir(parents=True, exist_ok=True)
         logger.info("Fetcher init -> done")
-    
+
     def fetch(self, last_since_id: str = "") -> list[FetchedInfo]:
         logger.info("Fetcher fetch -> start")
         fetched_entry_list: list[dict] = []
         if not self.is_debug:
             logger.info("Fetch from misskey API -> start")
-            fetched_entry_list = self.misskey.notes_with_reactions(
-                limit=100, last_since_id=last_since_id
-            )
+            fetched_entry_list = self.misskey.notes_with_reactions(limit=100, last_since_id=last_since_id)
             logger.info("Fetch from misskey API -> done")
 
             if len(fetched_entry_list) > 0:
@@ -43,9 +40,7 @@ class Fetcher():
                 date_str = datetime.now().strftime("%Y%m%d%H%M%S")  # YYYYMMDDhhmmss
                 cache_filename = f"{date_str}_notes_with_reactions.json"
                 save_path = self.cache_path / cache_filename
-                save_path.write_bytes(
-                    orjson.dumps({"result": fetched_entry_list}, option=orjson.OPT_INDENT_2)
-                )
+                save_path.write_bytes(orjson.dumps({"result": fetched_entry_list}, option=orjson.OPT_INDENT_2))
                 logger.info(f"Saved for {str(save_path)}.")
                 logger.info("Saving Cache -> done")
         else:
@@ -54,9 +49,7 @@ class Fetcher():
             if len(load_paths) == 0:
                 raise ValueError("Cache file is not exist.")
             load_path: Path = load_paths[-1]
-            fetched_entry_list: list[dict] = orjson.loads(
-                load_path.read_bytes()
-            ).get("result")
+            fetched_entry_list: list[dict] = orjson.loads(load_path.read_bytes()).get("result")
             logger.info(f"Loaded from {str(load_path)}.")
             logger.info("Fetch from cache file -> done")
         fetched_entry_list.reverse()
@@ -73,6 +66,7 @@ class Fetcher():
 
 if __name__ == "__main__":
     import logging.config
+
     logging.config.fileConfig("./log/logging.ini", disable_existing_loggers=False)
     config_path: Path = Path("./config/config.json")
     cache_path = Path("./misskeycrawler/cache/")

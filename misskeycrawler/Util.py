@@ -2,11 +2,9 @@ from datetime import datetime, timedelta
 from typing import Any
 
 
-def find_values(obj: Any,
-                key: str,
-                is_predict_one: bool = False,
-                key_whitelist: list[str] = None,
-                key_blacklist: list[str] = None) -> Any | list[Any]:
+def find_values(
+    obj: Any, key: str, is_predict_one: bool = False, key_whitelist: list[str] = None, key_blacklist: list[str] = None
+) -> Any | list[Any]:
     if not key_whitelist:
         key_whitelist = []
     if not key_blacklist:

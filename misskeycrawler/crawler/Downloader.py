@@ -12,7 +12,7 @@ logger = getLogger(__name__)
 logger.setLevel(INFO)
 
 
-class Downloader():
+class Downloader:
     save_base_path: Path
     save_num: int
 
@@ -36,9 +36,7 @@ class Downloader():
             response = await client.get(url)
             response.raise_for_status()
 
-            filepath.write_bytes(
-                response.content
-            )
+            filepath.write_bytes(response.content)
 
     async def excute(self, media_list: list[Media]) -> None:
         task_list = [self.worker(media) for media in media_list]
@@ -53,6 +51,7 @@ class Downloader():
 
 if __name__ == "__main__":
     import logging.config
+
     logging.config.fileConfig("./log/logging.ini", disable_existing_loggers=False)
     config_path = Path("./config/config.json")
 

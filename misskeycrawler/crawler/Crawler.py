@@ -13,7 +13,7 @@ from misskeycrawler.db.UserDB import UserDB
 logger = getLogger(__name__)
 
 
-class Crawler():
+class Crawler:
     fetcher: Fetcher
     reaction_db: ReactionDB
     note_db: NoteDB

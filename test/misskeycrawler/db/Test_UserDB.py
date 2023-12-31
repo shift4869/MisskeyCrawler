@@ -12,7 +12,9 @@ class TestUserDB(unittest.TestCase):
         controller = UserDB(db_path=":memory:")
         return controller
 
-    def get_record(self, id_num: int, type_kind: Literal["record", "list", "dict"] = "record") -> User | list[User] | list[dict]:
+    def get_record(
+        self, id_num: int, type_kind: Literal["record", "list", "dict"] = "record"
+    ) -> User | list[User] | list[dict]:
         now_date = datetime.now().isoformat()
         arg_dict = {
             "user_id": f"user_id_{id_num}",

@@ -24,9 +24,7 @@ class TestFetcher(unittest.TestCase):
                 "token": "misskey_token",
             }
         }
-        self.config_path.write_bytes(
-            orjson.dumps(config_dict)
-        )
+        self.config_path.write_bytes(orjson.dumps(config_dict))
 
     def tearDown(self) -> None:
         self.config_path.unlink(missing_ok=True)
@@ -55,9 +53,7 @@ class TestFetcher(unittest.TestCase):
             last_since_id = "last_since_id"
             actual = fetcher.fetch(last_since_id)
             self.assertEqual(["fetched_entry"], actual)
-            mock_misskey().notes_with_reactions.assert_called_once_with(
-                limit=100, last_since_id=last_since_id
-            )
+            mock_misskey().notes_with_reactions.assert_called_once_with(limit=100, last_since_id=last_since_id)
             mock_misskey().notes_with_reactions.reset_mock()
             mock_fetched_info.create.assert_called()
             mock_fetched_info.create.reset_mock()

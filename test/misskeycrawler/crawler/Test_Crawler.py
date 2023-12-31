@@ -48,6 +48,7 @@ class TestCrawler(unittest.TestCase):
                 r = MagicMock()
                 r.reaction_id = reaction_id
                 return r
+
             reaction_id_mock = make_reaction_id_mock(111111)
             last_reaction_id = 111111
             mock_reaction_db().select_last_record.side_effect = lambda: reaction_id_mock
@@ -57,6 +58,7 @@ class TestCrawler(unittest.TestCase):
                 r1 = [MagicMock() for _ in range(4)]
                 r.get_records.side_effect = lambda: [r1]
                 return [r]
+
             mock_fetcher().fetch.side_effect = make_fetched_list_mock
 
             actual = self.crawler.run()

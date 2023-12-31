@@ -35,7 +35,7 @@ class TestBase(unittest.TestCase):
                 connect_args={
                     "timeout": 30,
                     "check_same_thread": False,
-                }
+                },
             )
             mock_model_base.metadata.create_all.assert_called_once_with("created_engine")
 

@@ -49,9 +49,7 @@ class TestMisskey(unittest.TestCase):
         misskey = self.get_instance()
         misskey.misskey._Misskey__request_api = MagicMock(return_value="__request_api_return")
         path = "users/reactions"
-        params = {
-            "userId": "user1user1"
-        }
+        params = {"userId": "user1user1"}
         actual = misskey._run(path, params)
         self.assertEqual("__request_api_return", actual)
         misskey.misskey._Misskey__request_api.assert_called_once_with(path, **params)
@@ -66,11 +64,7 @@ class TestMisskey(unittest.TestCase):
             limit = 10
             last_since_id = "last_since_id"
             actual = misskey.notes_with_reactions(limit, last_since_id)
-            params = {
-                "userId": "user1user1",
-                "limit": int(limit),
-                "sinceId": last_since_id
-            }
+            params = {"userId": "user1user1", "limit": int(limit), "sinceId": last_since_id}
             self.assertEqual(params, actual)
 
 

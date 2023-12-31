@@ -44,9 +44,7 @@ class UserDB(Base):
 
         for r in record_list:
             try:
-                q = session.query(User).filter(
-                    and_(User.user_id == r.user_id)
-                ).with_for_update()
+                q = session.query(User).filter(and_(User.user_id == r.user_id)).with_for_update()
                 p = q.one()
             except NoResultFound:
                 # INSERT

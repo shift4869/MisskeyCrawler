@@ -8,7 +8,9 @@ from misskeycrawler.db.Model import Media, Note, Reaction, User
 
 
 class TestModel(unittest.TestCase):
-    def get_record(self, id_num: int, type_kind: Literal["record", "list", "dict"] = "record") -> Media | list[Media] | list[dict]:
+    def get_record(
+        self, id_num: int, type_kind: Literal["record", "list", "dict"] = "record"
+    ) -> Media | list[Media] | list[dict]:
         now_date = datetime.now().isoformat()
         arg_dict = {
             "note_id": f"note_id_{id_num}",
