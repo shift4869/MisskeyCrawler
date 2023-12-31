@@ -7,6 +7,7 @@ license = "MIT LICENSE"
 readme = "README.md"
 
 [tool.poetry.dependencies]
+coverage = "^7.4.0"
 freezegun = "^1.4.0"
 httpx = "^0.24.1"
 isort = "^5.13.2"
