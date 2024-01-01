@@ -12,7 +12,7 @@ from misskeycrawler.util import find_values, to_jst
 
 class TestFetchedInfo(unittest.TestCase):
     def setUp(self) -> None:
-        self.cache_filepath = Path("./test/misskeycrawler/cache/test_notes_with_reactions.json")
+        self.cache_filepath = Path("./tests/misskeycrawler/cache/test_notes_with_reactions.json")
         self.fetched_entry_list = orjson.loads(self.cache_filepath.read_bytes()).get("result")
         return super().setUp()
 

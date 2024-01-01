@@ -29,7 +29,7 @@ class MisskeyManager:
         return self._user_dict
 
     def _run(self, path: str, params: dict = {}) -> list[dict] | dict | bool:
-        response = self.misskey.__request_api(path, **params)
+        response = self.misskey._Misskey__request_api(path, **params)
         return response
 
     def notes_with_reactions(self, limit: int = 100, last_since_id: str = "") -> list[dict]:

@@ -49,7 +49,7 @@ class TestFetcher(unittest.TestCase):
             mock_fetched_info.create.side_effect = lambda fetched_dict, instance_name: fetched_dict
 
             fetcher = Fetcher(self.config_path, False)
-            fetcher.cache_path = Path("./test/misskeycrawler/cache")
+            fetcher.cache_path = Path("./tests/misskeycrawler/cache")
             last_since_id = "last_since_id"
             actual = fetcher.fetch(last_since_id)
             self.assertEqual(["fetched_entry"], actual)
@@ -65,11 +65,11 @@ class TestFetcher(unittest.TestCase):
             expect_cachepath.unlink(missing_ok=True)
 
             fetcher = Fetcher(self.config_path, True)
-            fetcher.cache_path = Path("./test/misskeycrawler/cache")
+            fetcher.cache_path = Path("./tests/misskeycrawler/cache")
             actual = fetcher.fetch(last_since_id)
 
             expect: list[dict] = orjson.loads(
-                Path("./test/misskeycrawler/cache/test_notes_with_reactions.json").read_bytes()
+                Path("./tests/misskeycrawler/cache/test_notes_with_reactions.json").read_bytes()
             ).get("result")
             expect.reverse()
             self.assertEqual(expect, actual)

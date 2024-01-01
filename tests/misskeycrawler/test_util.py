@@ -12,7 +12,7 @@ from misskeycrawler.util import find_values, to_jst
 
 class TestUtil(unittest.TestCase):
     def test_find_values(self):
-        cache_filepath = Path("./test/misskeycrawler/cache/test_notes_with_reactions.json")
+        cache_filepath = Path("./tests/misskeycrawler/cache/test_notes_with_reactions.json")
         sample_dict = orjson.loads(cache_filepath.read_bytes()).get("result")
 
         # 辞書とキーのみ指定

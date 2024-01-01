@@ -47,12 +47,12 @@ class TestMisskey(unittest.TestCase):
 
     def test_run(self):
         misskey = self.get_instance()
-        misskey.misskey._MisskeyManager__request_api = MagicMock(return_value="__request_api_return")
+        misskey.misskey._Misskey__request_api = MagicMock(return_value="__request_api_return")
         path = "users/reactions"
         params = {"userId": "user1user1"}
         actual = misskey._run(path, params)
         self.assertEqual("__request_api_return", actual)
-        misskey.misskey._MisskeyManager__request_api.assert_called_once_with(path, **params)
+        misskey.misskey._Misskey__request_api.assert_called_once_with(path, **params)
 
     def test_notes_with_reactions(self):
         with ExitStack() as stack:

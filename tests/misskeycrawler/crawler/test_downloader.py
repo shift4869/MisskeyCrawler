@@ -15,12 +15,12 @@ logger = getLogger("misskeycrawler.crawler.downloader")
 
 class TestDownloader(unittest.TestCase):
     config_path: Path = Path("./config/test_config.json")
-    save_base_path: Path = Path("./test/misskeycrawler/crawler/")
+    save_base_path: Path = Path("./tests/misskeycrawler/crawler/")
 
     def setUp(self) -> None:
         config_dict = {
             "misskey": {
-                "save_base_path": "./test/misskeycrawler/crawler/",
+                "save_base_path": "./tests/misskeycrawler/crawler/",
                 "save_num": -1,
             }
         }
