@@ -35,7 +35,7 @@ class FetchedInfo:
         media_dicts = []
         try:
             media_dicts = find_values(note_dict, "files", True, [""])
-        except ValueError as e:
+        except ValueError:
             raise ValueError("Note entry has no media.")
 
         media_list = []

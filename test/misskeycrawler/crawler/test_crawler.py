@@ -11,9 +11,6 @@ logger = getLogger("misskeycrawler.crawler.crawler")
 
 
 class TestCrawler(unittest.TestCase):
-    def setUp(self) -> None:
-        pass
-
     def test_init(self):
         with ExitStack() as stack:
             mock_logger_info = stack.enter_context(patch.object(logger, "info"))

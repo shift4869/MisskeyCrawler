@@ -6,14 +6,14 @@ from pathlib import Path
 import orjson
 
 from misskeycrawler.crawler.valueobject.fetched_info import FetchedInfo
-from misskeycrawler.misskey.misskey import Misskey
+from misskeycrawler.misskey_manager.misskey_manager import MisskeyManager
 
 logger = getLogger(__name__)
 logger.setLevel(INFO)
 
 
 class Fetcher:
-    misskey: Misskey
+    misskey: MisskeyManager
     is_debug: bool
     cache_path = Path("./misskeycrawler/cache/")
 
@@ -21,7 +21,8 @@ class Fetcher:
         logger.info("Fetcher init -> start")
         config_dict = orjson.loads(config_path.read_bytes())
         instance_name = config_dict["misskey"]["instance"]
-        self.misskey = Misskey(instance_name, config_dict["misskey"]["token"])
+        token = config_dict["misskey"]["token"]
+        self.misskey = MisskeyManager(instance_name, token)
         self.is_debug = is_debug
 
         self.cache_path.mkdir(parents=True, exist_ok=True)
@@ -57,7 +58,11 @@ class Fetcher:
         logger.info("Create FetchedInfo -> start")
         fetched_info_list = []
         for entry in fetched_entry_list:
-            fetched_info = FetchedInfo.create(entry, self.misskey.instance_name)
+            try:
+                fetched_info = FetchedInfo.create(entry, self.misskey.instance_name)
+            except Exception as e:
+                logger.error(e)
+                continue
             fetched_info_list.append(fetched_info)
         logger.info("Create FetchedInfo -> done")
         logger.info("Fetcher fetch -> done")

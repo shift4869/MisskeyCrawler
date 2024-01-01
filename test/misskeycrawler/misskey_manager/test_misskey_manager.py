@@ -6,9 +6,9 @@ from unittest.mock import MagicMock
 
 from mock import patch
 
-from misskeycrawler.misskey.misskey import Misskey
+from misskeycrawler.misskey_manager.misskey_manager import MisskeyManager
 
-logger = getLogger("misskeycrawler.misskey.misskey")
+logger = getLogger("misskeycrawler.misskey_manager.misskey_manager")
 
 
 class TestMisskey(unittest.TestCase):
@@ -16,18 +16,18 @@ class TestMisskey(unittest.TestCase):
         self.instance_name = "instance_name"
         self.token = "misskey_token"
 
-    def get_instance(self) -> Misskey:
+    def get_instance(self) -> MisskeyManager:
         with ExitStack() as stack:
             mock_logger_info = stack.enter_context(patch.object(logger, "info"))
-            mock_misskey = stack.enter_context(patch("misskeycrawler.misskey.misskey.Mk"))
-            misskey = Misskey(self.instance_name, self.token)
+            mock_misskey = stack.enter_context(patch("misskeycrawler.misskey_manager.misskey_manager.Mk"))
+            misskey = MisskeyManager(self.instance_name, self.token)
             return misskey
 
     def test_init(self):
         with ExitStack() as stack:
             mock_logger_info = stack.enter_context(patch.object(logger, "info"))
-            mock_misskey = stack.enter_context(patch("misskeycrawler.misskey.misskey.Mk"))
-            misskey = Misskey(self.instance_name, self.token)
+            mock_misskey = stack.enter_context(patch("misskeycrawler.misskey_manager.misskey_manager.Mk"))
+            misskey = MisskeyManager(self.instance_name, self.token)
             mock_misskey.assert_called_once_with(self.instance_name, i=self.token)
             self.assertEqual(self.instance_name, misskey.instance_name)
             self.assertEqual(self.token, misskey.token)
@@ -47,16 +47,16 @@ class TestMisskey(unittest.TestCase):
 
     def test_run(self):
         misskey = self.get_instance()
-        misskey.misskey._Misskey__request_api = MagicMock(return_value="__request_api_return")
+        misskey.misskey._MisskeyManager__request_api = MagicMock(return_value="__request_api_return")
         path = "users/reactions"
         params = {"userId": "user1user1"}
         actual = misskey._run(path, params)
         self.assertEqual("__request_api_return", actual)
-        misskey.misskey._Misskey__request_api.assert_called_once_with(path, **params)
+        misskey.misskey._MisskeyManager__request_api.assert_called_once_with(path, **params)
 
     def test_notes_with_reactions(self):
         with ExitStack() as stack:
-            mock_run = stack.enter_context(patch("misskeycrawler.misskey.misskey.Misskey._run"))
+            mock_run = stack.enter_context(patch("misskeycrawler.misskey_manager.misskey_manager.MisskeyManager._run"))
             mock_run.side_effect = lambda path, params: params
 
             misskey = self.get_instance()

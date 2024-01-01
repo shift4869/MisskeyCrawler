@@ -1,7 +1,9 @@
+import logging.config
 from logging import getLogger
 
 from misskeycrawler.crawler.crawler import Crawler
 
+logging.config.fileConfig("./log/logging.ini", disable_existing_loggers=False)
 logger = getLogger(__name__)
 
 

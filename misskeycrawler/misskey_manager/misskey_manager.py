@@ -10,7 +10,7 @@ logger = getLogger(__name__)
 logger.setLevel(INFO)
 
 
-class Misskey:
+class MisskeyManager:
     instance_name: str
     token: str
     misskey: Mk
@@ -53,6 +53,6 @@ if __name__ == "__main__":
     config_dict = orjson.loads(config_path.read_bytes())
     instance_name = config_dict["misskey"]["instance"]
     token = config_dict["misskey"]["token"]
-    misskey = Misskey(instance_name, token)
+    misskey = MisskeyManager(instance_name, token)
     response = misskey.notes_with_reactions()
     pprint.pprint(response)
