@@ -26,7 +26,9 @@ class Downloader:
         logger.info("Downloader init -> done")
 
     async def worker(self, media: Media) -> None:
-        async with httpx.AsyncClient(timeout=httpx.Timeout(5, read=60)) as client:
+        transport = httpx.AsyncHTTPTransport(retries=5)
+        timeout = httpx.Timeout(5, read=60)
+        async with httpx.AsyncClient(follow_redirects=True, timeout=timeout, transport=transport) as client:
             url = media.url
             filename = media.get_filename()
             filepath = self.save_base_path / filename

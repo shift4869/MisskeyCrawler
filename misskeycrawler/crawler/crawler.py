@@ -73,6 +73,8 @@ class Crawler:
                     media_list.append(media)
 
         # メディアダウンロード・保存
+        # seen = []
+        # media_list = [media for media in media_list if media not in seen and not seen.append(media)]
         logger.info(f"Num of new media is {len(media_list)}.")
         start_time = time.time()
         self.downloader.download(media_list)

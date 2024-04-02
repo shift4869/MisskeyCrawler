@@ -4,6 +4,7 @@ from typing import Self
 
 from sqlalchemy import Boolean, Column, Integer, String, create_engine
 from sqlalchemy.orm import Session, declarative_base
+import urllib.parse
 
 Base = declarative_base()
 
@@ -288,7 +289,10 @@ class Media(Base):
 
     def get_filename(self) -> str:
         ext = ""
-        if re.search(r"^\..+$", (ext1 := Path(self.url).suffix)):
+        non_query_url = urllib.parse.urlunparse(
+            urllib.parse.urlparse(str(self.url))._replace(query=None, fragment=None)
+        )
+        if re.search(r"^\..+$", (ext1 := Path(non_query_url).suffix)):
             ext = ext1
         elif re.search(r"^.+?/.+$", (ext2 := self.type)):
             ext = "." + ext2.split("/")[1]
@@ -301,7 +305,8 @@ class Media(Base):
             raise ValueError("failed to get filename, invalid extension.")
 
         name = Path(self.name).with_suffix(ext).name
-        return f"{self.note_id}_{self.media_id}_{name}"
+        filename = f"{self.note_id}_{self.media_id}_{name}"
+        return filename
 
 
 if __name__ == "__main__":
