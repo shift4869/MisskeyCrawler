@@ -28,7 +28,7 @@
 1. config/config_example.jsonの中身を自分用に編集してconfig/config.iniにリネーム
     - MisskeyのAPIトークンを設定する（必須）
     - ローカルの保存先パスを設定する（必須）
-1. python misskey_crawler.pyで実行する
+1. python ./src/misskey_crawler/main.pyで実行する
 1. 出力されたmc_db.dbをsqliteビュワーで確認する
 1. ローカルの保存先パスにメディアが保存されたことを確認する
 
